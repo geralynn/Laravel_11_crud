@@ -26,10 +26,15 @@ class ProductController extends Controller
  /**
  * Store a newly created resource in storage.
  */
- public function store(StoreProductRequest $request) : 
-RedirectResponse
+ public function store(StoreProductRequest $request) : RedirectResponse
  {
- Product::create($request->validated());
+ $data = $request->validated();
+ if ($request->hasFile('image')) {
+ $file = $request->file('image');
+ $originalName = $file->getClientOriginalName();
+ $data['image'] = $file->storeAs('products', $originalName, 'private');
+ }
+ Product::create($data);
  return redirect()->route('products.index')
  ->withSuccess('New product is added successfully.');
  }
@@ -50,10 +55,17 @@ RedirectResponse
  /**
  * Update the specified resource in storage.
  */
- public function update(UpdateProductRequest $request, Product
-$product) : RedirectResponse
+ public function update(UpdateProductRequest $request, Product $product) : RedirectResponse
  {
- $product->update($request->validated());
+ $data = $request->validated();
+ if ($request->hasFile('image')) {
+ $file = $request->file('image');
+ $originalName = $file->getClientOriginalName();
+ $data['image'] = $file->storeAs('products', $originalName, 'private');
+ } else {
+ $data['image'] = $product->image;
+ }
+ $product->update($data);
  return redirect()->back()
  ->withSuccess('Product is updated successfully.');
  }
@@ -65,5 +77,19 @@ $product) : RedirectResponse
  $product->delete();
  return redirect()->route('products.index')
  ->withSuccess('Product is deleted successfully.');
+ }
+
+ /**
+ * Serve the private image file
+ */
+ public function serveImage($filename)
+ {
+ $path = storage_path('app/private/products/' . $filename);
+ 
+ if (!file_exists($path)) {
+ abort(404);
+ }
+ 
+ return response()->file($path);
  }
 }
