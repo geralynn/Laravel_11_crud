@@ -27,27 +27,17 @@ class ProductController extends Controller
  * Store a newly created resource in storage.
  */
  public function store(StoreProductRequest $request) : RedirectResponse
-{
-    $data = $request->validated();
-
-    if ($request->hasFile('image')) {
-        $file = $request->file('image');
-        $extension = strtolower($file->getClientOriginalExtension());
-
-        // Only allow jpg and png files
-        if (!in_array($extension, ['jpg', 'jpeg', 'png'])) {
-            return redirect()->back()->withErrors(['image' => 'Only JPG and PNG files are allowed.']);
-        }
-
-        $originalName = $file->getClientOriginalName();
-        $data['image'] = $file->storeAs('products', $originalName, 'private');
-    }
-
-     Product::create($data);
-    return redirect()->route('products.index')
-        ->withSuccess('New product is added successfully.');
-}
-
+ {
+ $data = $request->validated();
+ if ($request->hasFile('image')) {
+ $file = $request->file('image');
+ $originalName = $file->getClientOriginalName();
+ $data['image'] = $file->storeAs('products', $originalName, 'private');
+ }
+ Product::create($data);
+ return redirect()->route('products.index')
+ ->withSuccess('New product is added successfully.');
+ }
  /**
  * Display the specified resource.
  */
@@ -66,25 +56,16 @@ class ProductController extends Controller
  * Update the specified resource in storage.
  */
  public function update(UpdateProductRequest $request, Product $product) : RedirectResponse
-{
-    $data = $request->validated();
-
-    if ($request->hasFile('image')) {
-        $file = $request->file('image');
-        $extension = strtolower($file->getClientOriginalExtension());
-
-        // Only allow jpg and png files
-        if (!in_array($extension, ['jpg', 'jpeg', 'png'])) {
-            return redirect()->back()->withErrors(['image' => 'Only JPG and PNG files are allowed.']);
-        }
-
-        $originalName = $file->getClientOriginalName();
-        $data['image'] = $file->storeAs('products', $originalName, 'private');
-    } else {
-        $data['image'] = $product->image;
-    }
-
-    $product->update($data);
+ {
+ $data = $request->validated();
+ if ($request->hasFile('image')) {
+ $file = $request->file('image');
+ $originalName = $file->getClientOriginalName();
+ $data['image'] = $file->storeAs('products', $originalName, 'private');
+ } else {
+ $data['image'] = $product->image;
+ }
+ $product->update($data);
  return redirect()->back()
  ->withSuccess('Product is updated successfully.');
  }

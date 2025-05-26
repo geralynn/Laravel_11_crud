@@ -29,7 +29,7 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-        return redirect()->route('products.index'); // change to your landing route
+        return redirect()->route('login'); // change to your landing route
     }
 
     public function showLogin()

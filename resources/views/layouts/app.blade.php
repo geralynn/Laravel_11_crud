@@ -17,20 +17,24 @@
             <div class="col-md-6">
                 <h3>Simple Laravel 11 CRUD Application Tutorial</h3>
             </div>
-            <div class="col-md-6 text-end">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="btn btn-danger btn-sm">
-                        <i class="bi bi-box-arrow-right"></i> Log Out
-                    </button>
-                </form>
-            </div>
-        </div>
-
+<div class="col-md-6 text-end">
+    @auth
+        @if (!Request::routeIs('login'))
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="btn btn-danger btn-sm">
+                    <i class="bi bi-box-arrow-right"></i> Log Out
+                </button>
+            </form>
+        @endif
+    @endauth
+</div>
         <!-- Main Content -->
         @yield('content')
 
         <!-- Footer -->
+           @auth
+        @if (!Request::routeIs('login'))
         <div class="row justify-content-center text-center mt-5">
             <div class="col-md-12">
                 <p>
@@ -40,6 +44,8 @@
                     </a>
                 </p>
             </div>
+             @endif
+    @endauth
         </div>
     </div>
 

@@ -31,17 +31,20 @@
                             @enderror
                         </div>
                     </div>
-
                     <div class="mb-3 row">
                         <div class="col-md-6 offset-md-4">
-                            <button type="submit" class="btn btn-primary w-100">Login</button>
+                            <button type="submit" class="btn btn-primary w-100">
+                                Login
+                            </button>
                         </div>
                     </div>
-
+                    </div>
                     <div class="mb-3 row">
-                        <div class="col-md-6 offset-md-4 text-center">
-                            <p class="mb-0">Don't have an account? <a href="{{ route('register') }}">Register here</a></p>
+                        <div class="col-md-6 offset-md-4">
+                            <span>Don't have an account?<a href="{{ route('register') }}">Register here</a></span>
                         </div>
+                    </div>
+                   </div>
                     </div>
                 </form>
             </div>
